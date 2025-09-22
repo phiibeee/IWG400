@@ -1,3 +1,2 @@
 # IWG400
-proyecto olaa
-proyecto modificado pene 123
+proyecto bien bacán creado por Bárbara González, Sophia Gulppi, Melanie Gómez y Vicente González.
