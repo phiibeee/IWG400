@@ -1,10 +1,24 @@
-from django.http import HttpResponse
-from .firebase_config import db
+# climaeduca/views.py
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-def prueba_firebase(request):
-    doc_ref = db.collection('usuarios').document('usuario1')
-    doc_ref.set({
-        'nombre': 'Vicente',
-        'puntaje': 0
-    })
-    return HttpResponse("Datos guardados en Firebase")
+@csrf_exempt
+def api_login(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+    try:
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+    except:
+        return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'success': True, 'message': 'Inicio de sesión correcto'})
+    else:
+        return JsonResponse({'success': False, 'message': 'Credenciales incorrectas'}, status=401)
